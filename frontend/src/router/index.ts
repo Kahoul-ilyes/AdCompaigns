@@ -4,6 +4,8 @@ import LoginView from "@/views/LoginView.vue";
 import SignupView from "@/views/SignupView.vue";
 import {isAuthenticated} from "@/lib/auth.ts";
 import LoggedLayout from "@/layouts/LoggedLayout.vue";
+import CreateAdCampaignView from "@/views/CreateAdCampaignView.vue";
+import EditAdCampaignView from "@/views/EditAdCampaignView.vue";
 
 const routes = [
   {
@@ -16,6 +18,16 @@ const routes = [
         path: '',
         name: 'Home',
         component: HomeView,
+      },
+      {
+        path: '/adCampaigns/create',
+        name: 'CreateAdCampaign',
+        component: CreateAdCampaignView
+      },
+      {
+        path: '/adCampaigns/:id',
+        name: 'AdCampaign',
+        component: EditAdCampaignView
       }
     ]
   },

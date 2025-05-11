@@ -7,8 +7,8 @@ class User(Base):
     username = Column(String(50), unique=True, index=True)
     hashed_password = Column(String(255))
 
-class AdCompaign(Base):
-    __tablename__ = "add_compaigns"
+class AdCampaign(Base):
+    __tablename__ = "add_campaigns"
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(50), unique=True, index=True)
     description = Column(String(255))

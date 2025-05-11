@@ -1,6 +1,6 @@
 <template>
   <div class="h-[60px] w-full flex items-center justify-between" style="background: white; padding: 1rem; top: 0; left: 0">
-    <el-button text @click="goHome" style="font-weight: bold">AdCompaign</el-button>
+    <el-button text @click="goHome" style="font-weight: bold">AdCampaign</el-button>
 
     <div class="flex items-center gap-4" style="gap: 1rem">
       <el-text style="color: black">{{ username }}</el-text>

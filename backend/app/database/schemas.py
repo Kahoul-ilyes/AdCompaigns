@@ -13,7 +13,7 @@ class UserOut(BaseModel):
     class Config:
         orm_mode = True
 
-class AdCompaignBase(BaseModel):
+class AdCampaignBase(BaseModel):
     name: str
     description: str
     start_date: datetime
@@ -21,13 +21,13 @@ class AdCompaignBase(BaseModel):
     budget: float
     status: bool
 
-class AdCompaignCreate(AdCompaignBase):
+class AdCampaignCreate(AdCampaignBase):
     pass
 
-class AdCompaignUpdate(AdCompaignBase):
+class AdCampaignUpdate(AdCampaignBase):
     pass
 
-class AdCompaignPartialUpdate(BaseModel):
+class AdCampaignPartialUpdate(BaseModel):
     name: Optional[str] = None
     description: Optional[str] = None
     start_date: Optional[datetime] = None
@@ -35,7 +35,7 @@ class AdCompaignPartialUpdate(BaseModel):
     budget: Optional[float] = None
     status: Optional[bool] = None
 
-class AdCompaignOut(AdCompaignBase):
+class AdCampaignOut(AdCampaignBase):
     id: int
 
     class Config:

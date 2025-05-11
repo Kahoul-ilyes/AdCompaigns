@@ -1,4 +1,4 @@
-import axios from "@/lib/axios.ts";
+import api from "@/lib/axios.ts";
 
 export const getToken = async (username: string, password: string) => {
   try {
@@ -7,7 +7,7 @@ export const getToken = async (username: string, password: string) => {
     data.append('username', username)
     data.append('password', password)
 
-    const response = await axios.post('/auth/token', data, {
+    const response = await api.post('/auth/token', data, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
@@ -19,12 +19,13 @@ export const getToken = async (username: string, password: string) => {
     return await response.data;
   } catch (error) {
     console.error(error)
+    throw error;
   }
 }
 
 export const register = async (username: string, password: string) => {
   try {
-    const response = await axios.post('/auth/register/', {
+    const response = await api.post('/auth/register/', {
       username,
       password,
     });
@@ -32,6 +33,7 @@ export const register = async (username: string, password: string) => {
     return await response.data;
   } catch (error) {
     console.error(error)
+    throw error;
   }
 }
 

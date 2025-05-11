@@ -72,14 +72,24 @@ const passwordConfirmationRules = [
 const router = useRouter()
 const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
-  await formEl.validate(async (valid, fields) => {
-    if (valid) {
-      await register(form.value.email, form.value.password);
 
-      await router.push('/login');
-    } else {
-      console.log('error submit!', fields)
-    }
-  })
+  try {
+    await formEl.validate();
+
+  } catch (error) {
+    console.error('error validate!', error);
+    return
+  }
+
+  try {
+
+    await register(form.value.email, form.value.password);
+
+    await router.push('/login');
+    alert('Registration successful!');
+  } catch (error) {
+    alert('Registration failed!');
+    console.error('error submit!', error);
+  }
 }
 </script>

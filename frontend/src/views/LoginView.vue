@@ -33,7 +33,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElForm, ElFormItem, ElInput, ElButton } from 'element-plus'
 import type { FormInstance } from 'element-plus'
-import { getToken } from "@/lib/auth.js"
+import {getToken} from "@/lib/auth.js"
 
 const formRef = ref<FormInstance>();
 const form = ref({
@@ -53,13 +53,24 @@ const passwordRules = [
 const router = useRouter()
 const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
-  await formEl.validate(async (valid, fields) => {
-    if (valid) {
-      await getToken(form.value.email, form.value.password);
-      await router.push('/');
-    } else {
-      console.log('error submit!', fields)
-    }
-  })
+
+  try {
+    await formEl.validate();
+
+  } catch (error) {
+    console.error('error validate!', error);
+    return
+  }
+
+  try {
+    await formEl.validate();
+
+    await getToken(form.value.email, form.value.password);
+    await router.push('/');
+    alert('Login successful!');
+  } catch (error) {
+    alert('Login failed!');
+    console.error('error submit!', error);
+  }
 }
 </script>

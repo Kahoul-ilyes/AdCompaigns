@@ -4,7 +4,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from auth import auth
 from database import models, schemas, crud, database, deps
 from fastapi.middleware.cors import CORSMiddleware
-from routes import ad_compaign
+from routes import ad_campaign
 
 models.Base.metadata.create_all(bind=database.engine)
 
@@ -32,5 +32,5 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
     token = auth.create_access_token({"sub": user.username})
     return {"access_token": token, "token_type": "bearer"}
 
-app.include_router(ad_compaign.router)
+app.include_router(ad_campaign.router)
 
