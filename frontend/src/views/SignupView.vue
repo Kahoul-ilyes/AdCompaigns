@@ -74,7 +74,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   await formEl.validate(async (valid, fields) => {
     if (valid) {
-      const data = await register(form.value.email, form.value.password);
+      await register(form.value.email, form.value.password);
 
       await router.push('/login');
     } else {
