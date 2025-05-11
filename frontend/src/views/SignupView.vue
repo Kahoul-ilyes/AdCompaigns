@@ -4,11 +4,11 @@
       <h2 class="text-center text-2xl font-semibold mb-6">Register</h2>
 
       <el-form :model="form" status-icon ref="formRef">
-        <el-form-item label="Email" prop="email" :rules="emailRules">
+        <el-form-item label="Email" prop="email" :rules="rules.email">
           <el-input v-model="form.email" placeholder="Email" />
         </el-form-item>
 
-        <el-form-item label="Password" prop="password" :rules="passwordRules">
+        <el-form-item label="Password" prop="password" :rules="rules.password">
           <el-input
             v-model="form.password"
             type="password"
@@ -16,7 +16,7 @@
           />
         </el-form-item>
 
-        <el-form-item label="Password confirmation" prop="passwordConfirmation" :rules="passwordConfirmationRules">
+        <el-form-item label="Password confirmation" prop="passwordConfirmation" :rules="rules.passwordConfirmation">
           <el-input
             v-model="form.passwordConfirmation"
             type="password"
@@ -35,7 +35,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { ElForm, ElFormItem, ElInput, ElButton } from 'element-plus'
+import {ElForm, ElFormItem, ElInput, ElButton} from 'element-plus'
 import type { FormInstance } from "element-plus";
 import { register } from "@/lib/auth.ts";
 
@@ -46,28 +46,28 @@ const form = ref({
   passwordConfirmation: ''
 })
 
-const emailRules = [
-  { required: true, message: 'Email missing', trigger: 'blur' },
-  { type: 'email', message: 'Email is invalid', trigger: 'blur' }
-]
-
-const passwordRules = [
-  { required: true, message: 'Password missing', trigger: 'blur' },
-]
-
-const passwordConfirmationRules = [
-  { required: true, message: 'Password confirmation missing', trigger: 'blur' },
-  {
-    validator: (rule, value, callback) => {
-      if (value !== form.value.password) {
-        callback(new Error('Passwords do not match'))
-      } else {
-        callback()
-      }
-    },
-    trigger: 'blur'
-  }
-]
+const rules = {
+  email: [
+    { required: true, message: 'Email missing', trigger: 'blur' },
+    { type: 'email' as const, message: 'Email is invalid', trigger: 'blur' }
+  ],
+  password: [
+    { required: true, message: 'Password missing', trigger: 'blur' },
+  ],
+  passwordConfirmation: [
+    { required: true, message: 'Password confirmation missing', trigger: 'blur' },
+    // Need to use any otherwise the build will fail (even with the correct type)
+    { validator: (rule: any, value: string, callback: (error?: string | Error) => void) => {
+        if (value !== form.value.password) {
+          callback(new Error('Passwords do not match'))
+        } else {
+          callback()
+        }
+      },
+      trigger: 'blur'
+    }
+  ]
+}
 
 const router = useRouter()
 const submitForm = async (formEl: FormInstance | undefined) => {

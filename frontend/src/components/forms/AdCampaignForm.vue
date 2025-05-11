@@ -39,7 +39,7 @@
 import {ref, watch, computed} from 'vue'
 import {useRouter} from "vue-router";
 import type {FormInstance} from "element-plus";
-import {createCampaign, updateCampaign} from "@/lib/adCampaign.ts";
+import {type AdCampaign, createCampaign, updateCampaign} from "@/lib/adCampaign.ts";
 
 const router = useRouter()
 
@@ -61,7 +61,15 @@ watch(
   () => props.campaign,
   (newVal) => {
     if (newVal) {
-      form.value = { ...newVal }
+      const { name, description, start_date, end_date, budget, status } = newVal
+      form.value = {
+        name,
+        description,
+        start_date,
+        end_date,
+        budget,
+        status,
+      }
     }
   },
   { immediate: true }
@@ -81,7 +89,8 @@ const rules = {
   ],
   end_date: [
     { required: true, message: 'Campaign end date is required', trigger: 'change' },
-    { validator: (rule, value, callback) => {
+    // Need to use any otherwise the build will fail (even with the correct type)
+    { validator: (rule: any, value: string, callback: (error?: string | Error) => void) => {
         if (new Date(value) < new Date(form.value.start_date)) {
           callback(new Error('End date must be after start date'))
         } else {
@@ -92,7 +101,8 @@ const rules = {
   ],
   budget: [
     { required: true, message: 'Campaign budget is required', trigger: 'blur' },
-    { validator: (rule, value, callback) => {
+    // Need to use any otherwise the build will fail (even with the correct type)
+    { validator: (rule: any, value: string, callback: (error?: string | Error) => void) => {
         if (Number(value) < 0) {
           callback(new Error('Budget must be greater than or equal to 0'))
         } else {
@@ -115,10 +125,10 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   }
 
   try {
-    if (isEdit.value) {
+    if (isEdit.value && props.campaign?.id) {
       await updateCampaign(props.campaign.id, form.value)
       alert('Campaign updated successfully!')
-    } else {
+    } else if (!isEdit.value) {
       await createCampaign(form.value)
       alert('Campaign created successfully!')
     }

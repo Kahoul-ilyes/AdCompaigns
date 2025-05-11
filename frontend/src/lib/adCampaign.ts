@@ -7,7 +7,7 @@ export type AdCampaign = {
   start_date: string;
   end_date: string;
   budget: number;
-  status: string;
+  status: boolean;
 }
 
 export const fetchCampaigns = async () => {
@@ -21,7 +21,7 @@ export const fetchCampaigns = async () => {
   }
 }
 
-export const createCampaign = async (adCampaign: AdCampaign) => {
+export const createCampaign = async (adCampaign: AdCampaignForm) => {
   try {
     const response = await api.post('/adcampaigns', {
       ...adCampaign
@@ -51,7 +51,7 @@ export type AdCampaignForm = {
   start_date?: string;
   end_date?: string;
   budget?: number;
-  status?: string;
+  status?: boolean;
 }
 
 export const updateCampaign = async (id: number, adCampaign: AdCampaignForm) => {
@@ -78,5 +78,5 @@ export const deleteCampaign = async (id: number) => {
   }
 }
 
-export const changeCampaignStatus = async (id: number, status: string) =>
+export const changeCampaignStatus = async (id: number, status: boolean) =>
   await updateCampaign(id, { status })

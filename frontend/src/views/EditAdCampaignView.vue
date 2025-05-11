@@ -14,14 +14,13 @@
 import AdCampaignForm from "@/components/forms/AdCampaignForm.vue";
 import {ref, onMounted} from 'vue'
 import {useRoute} from 'vue-router'
-import {getCampaign} from '@/lib/adCampaign.ts'
-import type {AdCampaign} from '@/types'
+import {type AdCampaign, getCampaign} from '@/lib/adCampaign.ts'
 
 const route = useRoute()
 const campaign = ref<AdCampaign | null>(null)
 
 onMounted(async () => {
-  const id = route.params.id as string
+  const id = Number(route.params.id)
   try {
     campaign.value = await getCampaign(id)
   } catch (e) {
