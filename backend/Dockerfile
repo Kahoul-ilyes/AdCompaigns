@@ -1,27 +1,27 @@
-# Étape 1 : Image de base
+# Step 1: Base image
 FROM python:3.11-slim
 
-# Étape 2 : Installer netcat-openbsd pour wait-for-it.sh
+# Step 2: Install netcat-openbsd for wait-for-it.sh
 RUN apt-get update && apt-get install -y netcat-openbsd curl && apt-get clean
 
-# Étape 3 : Définir le répertoire de travail
+# Step 3: Set working directory
 WORKDIR /app
 
-# Étape 4 : Copier les fichiers nécessaires
+# Step 4: Copy necessary files
 COPY ./app /app
 
-# Ajoute le chemin du projet au PYTHONPATH
+# Add project path to PYTHONPATH
 ENV PYTHONPATH=/app/app
 
-# Étape 5 : Copier le script wait-for-it.sh
+# Step 5: Download wait-for-it.sh script
 RUN curl -sSL https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh -o /wait-for-it.sh
 
-# Étape 6 : Rendre wait-for-it.sh exécutable
+# Step 6: Make wait-for-it.sh executable
 RUN chmod +x /wait-for-it.sh
 
-# Étape 7 : Copier requirements.txt et installer les dépendances
+# Step 7: Copy requirements.txt and install dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Étape 8 : Lancer l’application avec wait-for-it.sh
+# Step 8: Run the application with wait-for-it.sh
 CMD ["/wait-for-it.sh", "mysql:3306", "--", "python3", "-m", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]

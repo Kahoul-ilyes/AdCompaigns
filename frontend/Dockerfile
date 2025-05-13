@@ -1,19 +1,30 @@
-FROM node:20-alpine
+# Step 1: Build the frontend
+FROM node:20-alpine AS builder
 
-# Crée un dossier de travail
 WORKDIR /app
 
-# Copie uniquement les fichiers nécessaires à l'installation
+# Copy necessary files to install dependencies
 COPY package*.json ./
 
-# Installe les dépendances
 RUN npm install
 
-# Copie le reste du projet
-COPY . /
+# Copy the rest of the files and build the project
+COPY . .
 
-# Expose le port par défaut de Vite
-EXPOSE 5173
+RUN npm run build
 
-# Lance le serveur de dev
-CMD ["npm", "run", "dev", "--", "--host"]
+# Step 2: Static file server with nginx
+FROM nginx:stable-alpine
+
+# Remove the default nginx configuration
+RUN rm -rf /usr/share/nginx/html/*
+
+# Copy built files to nginx's served directory
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Copy custom nginx config if needed
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
