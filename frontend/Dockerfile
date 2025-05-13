@@ -4,13 +4,13 @@ FROM node:20-alpine
 WORKDIR /app
 
 # Copie uniquement les fichiers nécessaires à l'installation
-COPY package*.json /app
+COPY package*.json ./
 
 # Installe les dépendances
 RUN npm install
 
 # Copie le reste du projet
-COPY . /app
+COPY . /
 
 # Expose le port par défaut de Vite
 EXPOSE 5173
